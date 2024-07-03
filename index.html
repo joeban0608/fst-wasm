@@ -6,19 +6,37 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Hello here is wasm practice.</h1>    
+    <h1>Hello here is wasm practice.</h1>
+    <input type="number" id="numberInput" placeholder="Enter a number" />
+    <button onclick="calculateSquare()">Calculate Square</button>
+    <p id="result"></p>
+
     <script>
-      (async () => {
+      // (async () => {
+      //   const res = await fetch("square.wasm");
+      //   const wasmFile = await res.arrayBuffer();
+      //   const module = await WebAssembly.compile(wasmFile);
+      //   const instance = await WebAssembly.instantiate(module);
+      //   const square = instance.exports.square(13);
+      //   // console.log("The square of 13 = " + square);
+      // })();
+      async function calculateSquare() {
         const res = await fetch("square.wasm");
         const wasmFile = await res.arrayBuffer();
-        // console.log("wasmFile", wasmFile);
         const module = await WebAssembly.compile(wasmFile);
-        // console.log('module', module)
         const instance = await WebAssembly.instantiate(module);
-        console.log("instance", instance);
-        const square = instance.exports.square(13);
-        console.log("The square of 13 = " + square);
-      })();
+        const square = instance.exports.square;
+        const input = document.getElementById("numberInput").value;
+        const number = parseInt(input, 10);
+        if (isNaN(number)) {
+          alert("Please enter a valid number");
+          return;
+        }
+        // const square = wasmInstance.exports.square(number);
+        document.getElementById(
+          "result"
+        ).innerText = `The square of ${number} is ${square(number)}`;
+      }
     </script>
   </body>
 </html>

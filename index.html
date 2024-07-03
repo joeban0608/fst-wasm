@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello here is wasm practice.</h1>    
+    <script>
+      (async () => {
+        const res = await fetch("square.wasm");
+        const wasmFile = await res.arrayBuffer();
+        // console.log("wasmFile", wasmFile);
+        const module = await WebAssembly.compile(wasmFile);
+        // console.log('module', module)
+        const instance = await WebAssembly.instantiate(module);
+        console.log("instance", instance);
+        const square = instance.exports.square(13);
+        console.log("The square of 13 = " + square);
+      })();
+    </script>
+  </body>
+</html>
